@@ -18,7 +18,7 @@ The goal is to build a clean, reproducible ETL pipeline that enables regulatory 
 
 ---
 
-## Data Sources
+## Data Sources and PDF Extraction
 
 ### RBI Ombudsman Annual Reports (2016–17 to 2024–25)
 
@@ -29,13 +29,6 @@ Extracted information includes:
 * Office-wise complaints
 * Disposal statistics
 
-### data.gov.in Complaint Datasets
-
-* Complaint statistics
-* Category-wise complaints
-* Office-wise complaints
-* Bank-wise complaints
-
 ### DBIE Banking Indicators
 
 * Gross NPA
@@ -44,36 +37,6 @@ Extracted information includes:
 * Other supervisory metrics
 
 ---
-
-## Project Structure
-
-```text
-darpan/
-│
-├── data/
-│   ├── raw/              # Source PDFs and downloaded datasets (ignored)
-│   ├── extracted/        # Generated CSVs (ignored)
-│   └── sample/           # Optional sample outputs
-│
-├── extract_tables.py
-├── table_map.json
-├── requirements.txt
-├── README.md
-└── .gitignore
-```
-
----
-
-# Phase 1 — Data Inventory & PDF Extraction ✅
-
-Completed
-
-### Data Inventory
-
-* Collected RBI Ombudsman Annual Reports
-* Collected public complaint datasets
-* Collected DBIE banking indicators
-* Documented reporting years and available tables
 
 ### Targeted PDF Extraction
 
@@ -86,26 +49,8 @@ Categories extracted:
 * Office-wise complaints
 * Disposal statistics
 
-### Extraction Workflow
+<img width="1024" height="559" alt="image" src="https://github.com/user-attachments/assets/7a81cbca-768d-43e5-9c77-0f74b481cad9" />
 
-```
-PDF
-    │
-    ▼
-Read Table of Contents
-    │
-    ▼
-Locate target table using table_map.json
-    │
-    ▼
-Convert printed page → PDF page
-    │
-    ▼
-Extract table using Camelot
-    │
-    ▼
-Export CSV
-```
 
 ---
 
@@ -118,39 +63,3 @@ Export CSV
 
 ---
 
-# Upcoming Work
-
-## Phase 2 — ETL Pipeline
-
-* Clean extracted tables
-* Standardize schemas across years
-* Normalize bank and office names
-* Handle reporting format changes
-* Merge annual datasets
-* Validate extracted values against data.gov.in
-
-## Phase 3 — Data Warehouse
-
-* Design analytical schema
-* Load cleaned datasets into PostgreSQL
-* Create reusable data models
-
-## Phase 4 — Analytics
-
-* Complaint trends
-* Bank benchmarking
-* Office performance analysis
-* Complaint disposal efficiency
-* Regulatory dashboards
-
----
-
-## Status
-
-| Phase          | Status     |
-| -------------- | ---------- |
-| Data Inventory | ✅ Complete |
-| PDF Extraction | ✅ Complete |
-| ETL Pipeline   | 🚧 Next    |
-| Data Warehouse | Planned    |
-| Analytics      | Planned    |
