@@ -38,28 +38,3 @@ Extracted information includes:
 
 ---
 
-### Targeted PDF Extraction
-
-Instead of extracting every table from every report, the extraction pipeline targets only the required supervisory tables.
-
-Categories extracted:
-
-* Bank-wise complaints
-* Category-wise complaints
-* Office-wise complaints
-* Disposal statistics
-
-<img width="1024" height="559" alt="image" src="https://github.com/user-attachments/assets/7a81cbca-768d-43e5-9c77-0f74b481cad9" />
-
-
----
-
-## Technologies
-
-* Python
-* Camelot
-* pdfplumber
-* pandas
-
----
-
