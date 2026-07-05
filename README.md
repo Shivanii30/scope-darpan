@@ -1,8 +1,8 @@
-# DARPAN
+# DARPAN - SCOPE
 
-### Diagnostic Analytics & Regulatory Pattern Awareness Network
+### Systematic Classification of Policy and Complaint Evidence
 
-DARPAN is a data engineering and analytics project that consolidates complaint data from the Reserve Bank of India (RBI) Ombudsman reports, public complaint datasets, and banking sector indicators into a unified analytical platform.
+This is a data engineering and analytics project that consolidates complaint data from the Reserve Bank of India (RBI) Ombudsman reports, public complaint datasets, and banking sector indicators into a unified analytical platform.
 
 The goal is to build a clean, reproducible ETL pipeline that enables regulatory analytics, complaint trend analysis, and banking supervision insights.
 
