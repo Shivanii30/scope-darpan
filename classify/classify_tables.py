@@ -14,7 +14,7 @@ def main():
         description="Classify Ombudsman PDF tables using local Qwen2.5:3b via Ollama"
     )
     parser.add_argument("--input",   default="extractions.json",
-                        help="Path to extractions.json from extract_pdfs.py")
+                        help="Path to extractions.json from extract_tables.py")
     parser.add_argument("--output",  default="output",
                         help="Directory to save results (default: ./output)")
     parser.add_argument("--model",   default=DEFAULT_MODEL,

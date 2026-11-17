@@ -4,9 +4,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Optional
  
-from config import CATEGORIES
 from ollama_client import classify_via_llm
-from utils import clean_table_data, extract_year, is_quality_table, keyword_candidates 
+from utils import clean_table_data, extract_year, is_quality_table, keyword_candidates
 
 def run_pipeline(
     extractions: list[dict],
@@ -75,7 +74,7 @@ def run_pipeline(
         results.append({
             "uid":        uid,
             "file":       doc["filename"],
-            "year":       _extract_year(doc["filename"]),
+            "year":       extract_year(doc["filename"]),
             "page":       page["page_number"],
             "table_index": tbl["table_index"],
             "category":   category,
@@ -88,3 +87,26 @@ def run_pipeline(
 
     print()   # newline after progress bar
     return results
+
+
+def save_results(results: list[dict], output_dir: str) -> None:
+    """Write all classified tables to <output_dir>/classified_tables.json.
+
+    This is the file the --resume flag in classify_tables.py reads back.
+    """
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    path = out / "classified_tables.json"
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=2)
+    print(f"Saved {len(results)} tables -> {path}")
+
+
+def print_summary(results: list[dict]) -> None:
+    """Print how many tables landed in each category, and by confidence."""
+    print("\n  Classification summary")
+    print(f"    Total classified: {len(results)}")
+    for cat, n in sorted(Counter(r["category"] for r in results).items()):
+        print(f"    {cat:<14}: {n}")
+    conf = Counter(r["confidence"] for r in results)
+    print("    Confidence    : " + ", ".join(f"{k}={v}" for k, v in sorted(conf.items())))
