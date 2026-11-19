@@ -1,11 +1,24 @@
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
+**/__pycache__/
+*.pyo
 
 # Data
 data/raw/
 data/extracted/
+**/outputs/
+*.sqlite
+*.db
+darpan/m10/state/*.json
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+secrets/
 
 # Notebook
 .ipynb_checkpoints/

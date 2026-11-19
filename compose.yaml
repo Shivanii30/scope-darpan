@@ -1,0 +1,112 @@
+x-darpan-data-volumes: &darpan-data-volumes
+  - ./Ombudsman:/app/Ombudsman:ro
+  - ./darpan/m0/outputs:/app/darpan/m0/outputs
+  - ./darpan/m1/outputs:/app/darpan/m1/outputs
+  - ./darpan/m2/outputs:/app/darpan/m2/outputs
+  - ./darpan/m3/outputs:/app/darpan/m3/outputs
+  - ./darpan/m4/outputs:/app/darpan/m4/outputs
+  - ./darpan/m5/outputs:/app/darpan/m5/outputs
+  - ./darpan/m6/outputs:/app/darpan/m6/outputs
+  - ./darpan/m7/outputs:/app/darpan/m7/outputs
+  - ./darpan/m10/outputs:/app/darpan/m10/outputs
+  - ./darpan/m10/state:/app/darpan/m10/state
+
+services:
+  api:
+    build:
+      context: .
+    image: darpan:local
+    command: ["uvicorn", "darpan.m8.app:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "${DARPAN_API_PORT:-18000}:8000"
+    volumes:
+      - ./darpan/m3/outputs:/app/darpan/m3/outputs
+      - ./darpan/m5/outputs:/app/darpan/m5/outputs
+      - ./darpan/m6/outputs:/app/darpan/m6/outputs
+      - ./darpan/m7/outputs:/app/darpan/m7/outputs
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - darpan
+
+  dashboard:
+    image: darpan:local
+    build:
+      context: .
+    command: ["streamlit", "run", "darpan/m9/app.py", "--server.address=0.0.0.0", "--server.port=8501", "--browser.gatherUsageStats=false"]
+    environment:
+      DARPAN_API_URL: "http://api:8000"
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "${DARPAN_WEB_PORT:-8501}:8501"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3)"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - darpan
+
+  pipeline:
+    image: darpan:local
+    profiles: ["jobs"]
+    command: ["python", "darpan/m10/run_pipeline.py"]
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DARPAN_API_URL: "http://api:8000"
+      DARPAN_DRIFT_POLICY: "${DARPAN_DRIFT_POLICY:-block}"
+    volumes: *darpan-data-volumes
+    secrets:
+      - alert_webhook_url
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - darpan
+
+  scheduler:
+    image: darpan:local
+    profiles: ["scheduler"]
+    command: ["python", "darpan/m10/scheduler.py"]
+    environment:
+      PYTHONUNBUFFERED: "1"
+      DARPAN_API_URL: "http://api:8000"
+      DARPAN_PIPELINE_SCHEDULE: "${DARPAN_PIPELINE_SCHEDULE:-monthly}"
+      DARPAN_SCHEDULE_HOUR_UTC: "${DARPAN_SCHEDULE_HOUR_UTC:-3}"
+      DARPAN_RUN_ON_START: "${DARPAN_RUN_ON_START:-false}"
+      DARPAN_DRIFT_POLICY: "${DARPAN_DRIFT_POLICY:-block}"
+    volumes: *darpan-data-volumes
+    secrets:
+      - alert_webhook_url
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-m", "darpan.m10.monitor"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - darpan
+
+networks:
+  darpan:
+    driver: bridge
+
+secrets:
+  alert_webhook_url:
+    file: ${ALERT_WEBHOOK_FILE:-./secrets/alert_webhook_url.txt}
