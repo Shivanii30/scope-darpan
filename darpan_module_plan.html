@@ -1,0 +1,529 @@
+
+<h2 class="sr-only">DARPAN module-wise plan: 11 modules across 6 layers, 16-week timeline</h2>
+
+<style>
+.dp-wrap{padding:1rem 0 1.5rem}
+.dp-top{display:flex;align-items:baseline;gap:10px;margin-bottom:1.25rem}
+.dp-eyebrow{font-size:11px;letter-spacing:.10em;color:var(--text-muted);font-weight:500;text-transform:uppercase}
+.dp-sub{font-size:12px;color:var(--text-secondary)}
+.dp-layer{margin-bottom:1rem}
+.dp-lhead{display:flex;align-items:center;gap:8px;margin-bottom:.5rem}
+.dp-lbadge{font-size:10px;font-weight:500;letter-spacing:.06em;padding:2px 8px;border-radius:4px;white-space:nowrap}
+.dp-lline{flex:1;height:1px;background:var(--border)}
+.dp-card{border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.dp-card:hover{border-color:var(--border-strong)}
+.dp-card.open{border-color:var(--border-stronger)}
+.dp-header{display:flex;align-items:center;gap:10px;padding:9px 12px;user-select:none}
+.dp-badge{width:28px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.dp-name{flex:1;font-size:13px;font-weight:500;color:var(--text-primary)}
+.dp-dur{font-size:11px;color:var(--text-muted);white-space:nowrap}
+.dp-chev{font-size:14px;color:var(--text-muted);transition:transform .2s;line-height:1}
+.dp-card.open .dp-chev{transform:rotate(180deg)}
+.dp-body{display:none;padding:0 12px 12px;border-top:0.5px solid var(--border)}
+.dp-card.open .dp-body{display:block}
+.dp-section{margin-top:10px}
+.dp-slabel{font-size:10px;font-weight:500;letter-spacing:.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:5px}
+.dp-delivs{display:flex;flex-direction:column;gap:3px}
+.dp-deliv{font-size:12px;color:var(--text-secondary);display:flex;align-items:flex-start;gap:5px}
+.dp-deliv::before{content:"→";color:var(--text-muted);flex-shrink:0;margin-top:1px}
+.dp-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.dp-tag{font-size:11px;padding:2px 7px;border-radius:4px;background:var(--surface-1);border:0.5px solid var(--border);color:var(--text-secondary);font-family:var(--font-mono)}
+.dp-deps{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.dp-dep{font-size:11px;padding:2px 7px;border-radius:4px;border:0.5px dashed var(--border-strong);color:var(--text-secondary)}
+.dp-note{margin-top:8px;font-size:12px;color:var(--text-secondary);background:var(--surface-1);border-left:2px solid var(--border-strong);border-radius:0 4px 4px 0;padding:6px 8px;line-height:1.5}
+.dp-timeline{margin-top:1.25rem;border:0.5px solid var(--border);border-radius:10px;padding:12px 14px}
+.dp-tlabel{font-size:10px;font-weight:500;letter-spacing:.06em;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px}
+.dp-trow{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.dp-tname{font-size:11px;color:var(--text-secondary);width:82px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dp-ttrack{flex:1;height:14px;background:var(--surface-1);border-radius:3px;position:relative;overflow:hidden}
+.dp-tbar{height:100%;border-radius:3px;opacity:.85;position:absolute;top:0}
+.dp-tweeks{font-size:10px;color:var(--text-muted);width:36px;text-align:right;flex-shrink:0}
+.dp-wlabels{display:flex;margin-left:90px;margin-bottom:3px}
+.dp-wlabel{flex:1;font-size:9px;color:var(--text-muted);text-align:left}
+
+/* layer colors using CSS vars so dark mode works */
+.gray-bg{background:var(--surface-1);border-color:var(--border-strong);color:var(--text-secondary)}
+.purple-bg{background:#EEEDFE;border-color:#AFA9EC;color:#3C3489}
+.blue-bg{background:#E6F1FB;border-color:#85B7EB;color:#0C447C}
+.teal-bg{background:#E1F5EE;border-color:#5DCAA5;color:#085041}
+.amber-bg{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.coral-bg{background:#FAECE7;border-color:#F0997B;color:#4A1B0C}
+
+@media (prefers-color-scheme: dark){
+  .purple-bg{background:#26215C;border-color:#534AB7;color:#CECBF6}
+  .blue-bg{background:#042C53;border-color:#185FA5;color:#B5D4F4}
+  .teal-bg{background:#04342C;border-color:#0F6E56;color:#9FE1CB}
+  .amber-bg{background:#412402;border-color:#854F0B;color:#FAC775}
+  .coral-bg{background:#4A1B0C;border-color:#993C1D;color:#F5C4B3}
+}
+
+.gray-badge{background:var(--surface-1);border:0.5px solid var(--border-stronger);color:var(--text-secondary)}
+.purple-badge{background:#EEEDFE;color:#3C3489}
+.blue-badge{background:#E6F1FB;color:#0C447C}
+.teal-badge{background:#E1F5EE;color:#085041}
+.amber-badge{background:#FAEEDA;color:#633806}
+.coral-badge{background:#FAECE7;color:#4A1B0C}
+
+@media (prefers-color-scheme: dark){
+  .gray-badge{background:var(--surface-1);color:var(--text-secondary)}
+  .purple-badge{background:#26215C;color:#CECBF6}
+  .blue-badge{background:#042C53;color:#B5D4F4}
+  .teal-badge{background:#04342C;color:#9FE1CB}
+  .amber-badge{background:#412402;color:#FAC775}
+  .coral-badge{background:#4A1B0C;color:#F5C4B3}
+}
+
+.gray-bar{background:#B4B2A9}
+.purple-bar{background:#7F77DD}
+.blue-bar{background:#378ADD}
+.teal-bar{background:#1D9E75}
+.amber-bar{background:#BA7517}
+.coral-bar{background:#D85A30}
+
+.gray-card{border-left:3px solid #B4B2A9!important}
+.purple-card{border-left:3px solid #7F77DD!important}
+.blue-card{border-left:3px solid #378ADD!important}
+.teal-card{border-left:3px solid #1D9E75!important}
+.amber-card{border-left:3px solid #BA7517!important}
+.coral-card{border-left:3px solid #D85A30!important}
+</style>
+
+<div class="dp-wrap">
+  <div class="dp-top">
+    <span class="dp-eyebrow">DARPAN</span>
+    <span class="dp-sub">11 modules · ~16 weeks · click any card to expand</span>
+  </div>
+
+  <!-- LAYER 0: FOUNDATION -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge gray-bg">LAYER 0 · FOUNDATION</span>
+      <div class="dp-lline"></div>
+    </div>
+    <div class="dp-card gray-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge gray-badge">M0</div>
+        <span class="dp-name">Data reconnaissance & schema design</span>
+        <span class="dp-dur">1–2 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Source inventory across all 13 report years (page count, format, metrics available)</div>
+            <div class="dp-deliv">Format drift log: pre-2018 / 2018–2021 / post-2021 IOS schema variants documented</div>
+            <div class="dp-deliv">Canonical entity model on paper: Bank, Category, Region, Year, Complaint Volume, Disposal, Award</div>
+            <div class="dp-deliv">Extraction strategy decision per year (native text vs OCR)</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tooling</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Python</span><span class="dp-tag">pdfplumber (audit)</span><span class="dp-tag">Notion / Markdown</span><span class="dp-tag">DBIE portal</span>
+          </div>
+        </div>
+        <div class="dp-note">⚡ Critical gate — every downstream module depends on this audit being honest. The format drift log prevents 80% of ETL pain. Do not skip or rush.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 1: INGESTION -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge purple-bg">LAYER 1 · INGESTION</span>
+      <div class="dp-lline"></div>
+    </div>
+
+    <div class="dp-card purple-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge purple-badge">M1</div>
+        <span class="dp-name">PDF extraction engine</span>
+        <span class="dp-dur">2–3 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Native-text extractor using pdfplumber / camelot for text-layer PDFs</div>
+            <div class="dp-deliv">OCR fallback pipeline (Tesseract + LayoutLMv3/donut) for scanned years</div>
+            <div class="dp-deliv">Extraction router: picks strategy per year based on M0 audit flag</div>
+            <div class="dp-deliv">Raw extracted tables saved to disk with PDF + page reference for auditability</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">pdfplumber</span><span class="dp-tag">camelot</span><span class="dp-tag">Tesseract OCR</span><span class="dp-tag">LayoutLMv3</span><span class="dp-tag">donut</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M0 — format audit + strategy map</span></div>
+        </div>
+        <div class="dp-note">Don't assume one extractor works for all years. Validate extraction on 2–3 known years before declaring the router done.</div>
+      </div>
+    </div>
+
+    <div class="dp-card purple-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge purple-badge">M2</div>
+        <span class="dp-name">ETL & schema reconciliation</span>
+        <span class="dp-dur">2–3 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">3–4 per-format-era parser adapters mapping raw tables → RawComplaintRecord dataclass</div>
+            <div class="dp-deliv">Validation suite: row-count checks, cross-tab totals, spot-checks on known years</div>
+            <div class="dp-deliv">Append-only staging schema (raw extracted rows + source_doc_ref)</div>
+            <div class="dp-deliv">Transform pipeline: staging → normalized production schema</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Target tables produced</div>
+          <div class="dp-tags">
+            <span class="dp-tag">fact_bank_category</span><span class="dp-tag">fact_bank_group</span><span class="dp-tag">fact_bank_disposal</span><span class="dp-tag">fact_region_complaints</span><span class="dp-tag">fact_category_totals</span><span class="dp-tag">fact_disposal_modes</span><span class="dp-tag">fact_appeals</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Python</span><span class="dp-tag">Pydantic</span><span class="dp-tag">dataclasses</span><span class="dp-tag">pandas</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M1 — raw extracted tables</span></div>
+        </div>
+        <div class="dp-note">⚡ Highest timeline risk. Build and validate across ≥3 format eras before moving to Layer 2. An elegant stress score on shaky extracted data gives confidently wrong outputs.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2: INFRASTRUCTURE -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge blue-bg">LAYER 2 · INFRASTRUCTURE</span>
+      <div class="dp-lline"></div>
+    </div>
+
+    <div class="dp-card blue-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge blue-badge">M3</div>
+        <span class="dp-name">Database layer</span>
+        <span class="dp-dur">1 wk</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Dimension tables: banks, regions, complaint_categories</div>
+            <div class="dp-deliv">Main fact table: complaints_annual (bank_id, region_id, category_id, year, received, disposed, awards_issued, award_amount, avg_resolution_days, source_doc_ref, sub_type)</div>
+            <div class="dp-deliv">Supplementary: bank_financials from DBIE (deposits, advances, NPA ratio, branch count for normalization)</div>
+            <div class="dp-deliv">Read replica setup for dashboard traffic separation</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">PostgreSQL</span><span class="dp-tag">SQLAlchemy</span><span class="dp-tag">Alembic</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M2 — canonical schema confirmed</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-card blue-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge blue-badge">M4</div>
+        <span class="dp-name">Orchestration & pipeline management</span>
+        <span class="dp-dur">1 wk</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Airflow or Prefect DAGs for each pipeline stage (extract → reconcile → validate → load)</div>
+            <div class="dp-deliv">Re-run granularity: re-transform without re-running OCR when extraction bugs are fixed</div>
+            <div class="dp-deliv">DBIE scheduled scrape/download adapter (monthly/quarterly cron)</div>
+            <div class="dp-deliv">Pipeline failure alerting + schema drift detection (new PDF format = parser breaks)</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Airflow</span><span class="dp-tag">Prefect</span><span class="dp-tag">cron</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M3 — target schema live</span></div>
+        </div>
+        <div class="dp-note">Parallelizable with M3. Scaffold the DAG structure while M3 schema migrations run.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 3: ANALYTICS -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge teal-bg">LAYER 3 · ANALYTICS</span>
+      <div class="dp-lline"></div>
+    </div>
+
+    <div class="dp-card teal-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge teal-badge">M5</div>
+        <span class="dp-name">Stress score engine</span>
+        <span class="dp-dur">2–3 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Composite index sub-components</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Complaint intensity — complaints per branch or per ₹ crore deposits (size-normalized)</div>
+            <div class="dp-deliv">Trend velocity — YoY growth rate, category-weighted</div>
+            <div class="dp-deliv">Resolution quality — disposal rate, avg resolution time, % maintainable complaints</div>
+            <div class="dp-deliv">Award severity — compensation amounts vs peer-group median</div>
+            <div class="dp-deliv">Concentration risk — category/regional clustering flag (spike in one area vs broad stress)</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Normalization approach</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Z-scores or percentile rank within peer group (PSU / private / cooperative / foreign — not raw-scale cross-comparison)</div>
+            <div class="dp-deliv">Documented weighting rationale — this is the piece regulators will interrogate most</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Python</span><span class="dp-tag">pandas</span><span class="dp-tag">numpy</span><span class="dp-tag">scipy</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M3 — complaints_annual + bank_financials loaded</span><span class="dp-dep">M4 — pipeline confirmed stable</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-card teal-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge teal-badge">M6</div>
+        <span class="dp-name">Anomaly detection engine</span>
+        <span class="dp-dur">1–2 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Detection methods (in order of implementation)</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Baseline: rolling z-score on category-wise complaint time series per bank — flag &gt;2–3σ deviations</div>
+            <div class="dp-deliv">Seasonal decomposition (STL) on complaint volumes — separate trend / seasonal / residual</div>
+            <div class="dp-deliv">Change-point detection via ruptures library for structural breaks in series</div>
+            <div class="dp-deliv">Isolation forest layer once baseline is validated and interpretable</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">statsmodels</span><span class="dp-tag">scikit-learn</span><span class="dp-tag">ruptures</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M5 — stress score stable, peer grouping done</span></div>
+        </div>
+        <div class="dp-note">Start simple. Explainability matters more than model sophistication for a regulatory tool. Don't jump to isolation forest before the z-score baseline is validated.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 4: INTELLIGENCE -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge amber-bg">LAYER 4 · INTELLIGENCE</span>
+      <div class="dp-lline"></div>
+    </div>
+
+    <div class="dp-card amber-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge amber-badge">M7</div>
+        <span class="dp-name">Policy brief generator</span>
+        <span class="dp-dur">2–3 wks</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Components</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Structured retrieval layer — queries Postgres (not raw PDFs) for bank/period/category context</div>
+            <div class="dp-deliv">Fixed output schema: Executive Summary → Trend Analysis → Stress Score Rationale → Peer Positioning → Anomalies Flagged</div>
+            <div class="dp-deliv">LLM fills narrative around pre-computed numbers only — never computes or invents figures</div>
+            <div class="dp-deliv">Pydantic models enforcing report schema + data-provenance footer (source years, tables referenced)</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">LangChain</span><span class="dp-tag">Pydantic</span><span class="dp-tag">Anthropic API</span><span class="dp-tag">FastAPI</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M5 — stress scores computed</span><span class="dp-dep">M6 — anomaly flags available</span></div>
+        </div>
+        <div class="dp-note">This is "text-to-report" generation, not open RAG. The LLM narrates numbers you've already computed. Never let it compute or invent metrics.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 5: DELIVERY -->
+  <div class="dp-layer">
+    <div class="dp-lhead">
+      <span class="dp-lbadge coral-bg">LAYER 5 · DELIVERY</span>
+      <div class="dp-lline"></div>
+    </div>
+
+    <div class="dp-card coral-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge coral-badge">M8</div>
+        <span class="dp-name">API layer</span>
+        <span class="dp-dur">1 wk</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Endpoints</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">/banks — list with filters (type, stress tier, region)</div>
+            <div class="dp-deliv">/banks/{id}/stress — score + sub-component breakdown + trend</div>
+            <div class="dp-deliv">/banks/{id}/anomalies — flagged events with severity + category</div>
+            <div class="dp-deliv">/briefs/generate — triggers M7 brief generation for bank/period</div>
+            <div class="dp-deliv">/analytics/peer-compare — peer group distributions by bank type</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">FastAPI</span><span class="dp-tag">SQLAlchemy</span><span class="dp-tag">pydantic</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M5 — stress scores</span><span class="dp-dep">M6 — anomaly flags</span><span class="dp-dep">M7 — brief generator</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-card coral-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge coral-badge">M9</div>
+        <span class="dp-name">Frontend dashboard</span>
+        <span class="dp-dur">1 wk</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Views</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Bank explorer — filterable by type, stress tier, region, year range</div>
+            <div class="dp-deliv">Trend charts — YoY complaint volume + category breakdown per bank</div>
+            <div class="dp-deliv">Anomaly timeline — flagged events with severity markers</div>
+            <div class="dp-deliv">Peer comparison — stress score distribution across bank type</div>
+            <div class="dp-deliv">Brief download — trigger generation and export to PDF</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack (v1 → v2)</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Streamlit (v1)</span><span class="dp-tag">React + Next.js (v2)</span><span class="dp-tag">Recharts</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M8 — API endpoints live</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dp-card coral-card" onclick="toggle(this)">
+      <div class="dp-header">
+        <div class="dp-badge coral-badge">M10</div>
+        <span class="dp-name">Deployment & monitoring</span>
+        <span class="dp-dur">1 wk</span>
+        <i class="ti ti-chevron-down dp-chev" aria-hidden="true"></i>
+      </div>
+      <div class="dp-body">
+        <div class="dp-section">
+          <div class="dp-slabel">Deliverables</div>
+          <div class="dp-delivs">
+            <div class="dp-deliv">Infrastructure: Postgres (+ read replica) + FastAPI + Streamlit on Render/Railway/cloud VM</div>
+            <div class="dp-deliv">DBIE refresh: scheduled scrape + ETL adapter re-run (monthly/quarterly per DBIE cadence)</div>
+            <div class="dp-deliv">Pipeline failure alerting — catches extraction errors before they silently corrupt scores</div>
+            <div class="dp-deliv">Schema drift detection — new RBI PDF format triggers immediate parser alert, not 3-month lag</div>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Tech stack</div>
+          <div class="dp-tags">
+            <span class="dp-tag">Render / Railway</span><span class="dp-tag">cron / Airflow</span><span class="dp-tag">Postgres read replica</span>
+          </div>
+        </div>
+        <div class="dp-section">
+          <div class="dp-slabel">Depends on</div>
+          <div class="dp-deps"><span class="dp-dep">M8 — API</span><span class="dp-dep">M9 — frontend</span><span class="dp-dep">M4 — pipeline DAGs</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="dp-timeline">
+    <div class="dp-tlabel">16-WEEK TIMELINE</div>
+    <div class="dp-wlabels">
+      <span class="dp-wlabel">Wk 1</span><span class="dp-wlabel">Wk 4</span><span class="dp-wlabel">Wk 8</span><span class="dp-wlabel">Wk 12</span><span class="dp-wlabel">Wk 16</span>
+    </div>
+    <div id="timeline-rows"></div>
+  </div>
+</div>
+
+<script>
+function toggle(card){card.classList.toggle('open')}
+
+const W=100;
+const rows=[
+  {id:'M0',label:'M0 Recon',color:'gray-bar',s:0,e:12.5},
+  {id:'M1',label:'M1 Extraction',color:'purple-bar',s:12.5,e:31.25},
+  {id:'M2',label:'M2 ETL',color:'purple-bar',s:25,e:43.75},
+  {id:'M3',label:'M3 Database',color:'blue-bar',s:43.75,e:56.25},
+  {id:'M4',label:'M4 Orchestr.',color:'blue-bar',s:43.75,e:56.25},
+  {id:'M5',label:'M5 Stress',color:'teal-bar',s:56.25,e:75},
+  {id:'M6',label:'M6 Anomaly',color:'teal-bar',s:68.75,e:81.25},
+  {id:'M7',label:'M7 Briefs',color:'amber-bar',s:75,e:87.5},
+  {id:'M8',label:'M8 API',color:'coral-bar',s:87.5,e:93.75},
+  {id:'M9',label:'M9 Frontend',color:'coral-bar',s:93.75,e:100},
+  {id:'M10',label:'M10 Deploy',color:'coral-bar',s:93.75,e:100},
+];
+const wk=n=>Math.round(n/6.25);
+const html=rows.map(r=>`
+<div class="dp-trow">
+  <span class="dp-tname">${r.label}</span>
+  <div class="dp-ttrack">
+    <div class="dp-tbar ${r.color}" style="left:${r.s}%;width:${r.e-r.s}%;min-width:4px"></div>
+  </div>
+  <span class="dp-tweeks">wk ${wk(r.s)+1}–${wk(r.e)}</span>
+</div>`).join('');
+document.getElementById('timeline-rows').innerHTML=html;
+</script>
